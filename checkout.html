@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+  <title>Checkout - OurHappiness Bakery</title>
+  <!-- Bootstrap core CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container mt-5">
+    <h1 class="text-center">Ringkasan Pesanan</h1>
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Produk</th>
+              <th scope="col">Jumlah</th>
+              <th scope="col">Harga</th>
+            </tr>
+          </thead>
+          <tbody id="order-summary">
+            <!-- Item pesanan akan ditambahkan di sini secara dinamis -->
+          </tbody>
+        </table>
+        <div class="text-right">
+          <h4>Total: <span id="total-price">0</span>k</h4>
+        </div>
+        <form id="checkout-form" class="mt-4">
+          <div class="form-group">
+            <label for="name">Nama</label>
+            <input type="text" class="form-control" id="name" required>
+          </div>
+          <div class="form-group">
+            <label for="address">Alamat</label>
+            <input type="text" class="form-control" id="address" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Telepon</label>
+            <input type="tel" class="form-control" id="phone" required>
+          </div>
+          <button type="submit" class="btn btn-success btn-block">Konfirmasi Pesanan</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    // Load order data from localStorage
+    const order = JSON.parse(localStorage.getItem('order')) || [];
+    const orderSummary = document.getElementById('order-summary');
+    const totalPriceElement = document.getElementById('total-price');
+    let totalPrice = 0;
+  
+    order.forEach(item => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${item.product}</td>
+        <td>${item.quantity}</td>
+        <td>${item.price * item.quantity}k</td>
+      `;
+      orderSummary.appendChild(row);
+      totalPrice += item.price * item.quantity;
+    });
+  
+    totalPriceElement.textContent = totalPrice;
+  
+    document.getElementById('checkout-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      Swal.fire({
+        icon: "success",
+        title: "Pesanan Dikonfirmasi",
+        text: "Pesanan Anda telah dikonfirmasi!",
+      }).then(() => {
+        // Clear order data from localStorage after confirmation
+        localStorage.removeItem('order');
+        // Redirect to thank you page or other actions
+        window.location.href = 'index.html';
+      });
+    });
+  </script>
+  <!-- SweetAlert2 JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+
+</html>
